@@ -14,12 +14,12 @@ function fish_path_helper -d "Generate PATH configuration commands"
     for file in $argv[2] $argv[2].d/*
       test -n "$argv[3]"
         and echo (set_color green)">>> generate $argv[1] from $file <<<"(set_color normal) 1>&2
-	    for line in (cat $file ^ /dev/null | grep -v '^\s*#')
+      for line in (cat $file ^ /dev/null | grep -v '^\s*#')
         set expanded_line (eval "echo $line")
         test -d $expanded_line
           and echo "set -gxp $argv[1] $expanded_line;"
           or echo "Error in file $file: $line is not a valid directory!" 1>&2
-	    end
+      end
     end
   end
 
