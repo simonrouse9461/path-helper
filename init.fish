@@ -4,7 +4,6 @@
 # * $package       package name
 # * $path          package path
 # * $dependencies  package dependencies
-echo plugin-path-helper
-if status --is-login
-  eval (fish_path_helper)
+if status is-login
+  eval (fish_path_helper -l)
 end
