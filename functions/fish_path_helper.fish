@@ -1,11 +1,11 @@
 function fish_path_helper -d "Generate PATH configuration commands"
   argparse --name=(status function)       \
-    (fish_opt --short=h --long=help)   \
+    (fish_opt --short=h --long=help)      \
     (fish_opt --short=l --long=local)     \
     (fish_opt --short=g --long=global)    \
     (fish_opt --short=o --long=override)  \
     (fish_opt --short=v --long=verbose)   \
-    (fish_opt --short=s --long=suppress)   \
+    (fish_opt --short=s --long=suppress)  \
   -- $argv
 
   set -q XDG_CONFIG_HOME
