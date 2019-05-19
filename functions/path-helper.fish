@@ -1,11 +1,11 @@
 function path-helper -d "Generate PATH configuration commands"
   argparse --name=(status function) -x P,M,U    \
-    (fish_opt --short=v --long=verbose)         \
-    (fish_opt --short=s --long=suppress)        \
     (fish_opt --short=P --long=path)            \
     (fish_opt --short=M --long=man-path)        \
     (fish_opt --short=U --long=fish-user-paths) \
     (fish_opt --short=d --long=dry-run)         \
+    (fish_opt --short=v --long=verbose)         \
+    (fish_opt --short=s --long=suppress)        \
   -- $argv
   or return 1
 
@@ -28,9 +28,9 @@ function path-helper -d "Generate PATH configuration commands"
   # determing path variable and set options
   set pathvar PATH
   set opt "-gxp"
-  set -q _flag_m
+  set -q _flag_M
     and set pathvar MANPATH
-  set -q _flag_u
+  set -q _flag_U
     and set pathvar fish_user_paths
     and set opt "-Up"
 
