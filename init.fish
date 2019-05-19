@@ -5,5 +5,12 @@
 # * $path          package path
 # * $dependencies  package dependencies
 if status is-login
-  eval (fish_path_helper -l)
+
+  set -q XDG_CONFIG_HOME
+    and set config_home $XDG_CONFIG_HOME
+    or set config_home ~/.config
+
+  path-helper -P {$config_home}/paths {$config_home}/paths.d
+  path-helper -M {$config_home}/manpaths {$config_home}/manpaths.d
+
 end
