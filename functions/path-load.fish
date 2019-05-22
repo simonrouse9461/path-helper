@@ -1,8 +1,7 @@
-function path-helper -d "Generate PATH configuration commands"
-  argparse --name=(status function) -x P,M,U    \
-    (fish_opt --short=P --long=path)            \
-    (fish_opt --short=M --long=man-path)        \
-    (fish_opt --short=U --long=fish-user-paths) \
+function path-load -d "Load paths from files and prepend to PATH"
+  argparse --name=(status function) -x p,m      \
+    (fish_opt --short=p --long=PATH)            \
+    (fish_opt --short=m --long=MANPATH)         \
     (fish_opt --short=d --long=dry-run)         \
     (fish_opt --short=v --long=verbose)         \
     (fish_opt --short=s --long=suppress)        \
@@ -10,7 +9,7 @@ function path-helper -d "Generate PATH configuration commands"
   or return 1
 
   # expand directories to list of files
-  for arg in $argv[1..-1]
+  for arg in $argv
     if test -d $arg
       set -a files {$arg}/*
     else if test -e $arg
@@ -30,9 +29,6 @@ function path-helper -d "Generate PATH configuration commands"
   set opt "-gxp"
   set -q _flag_M
     and set pathvar MANPATH
-  set -q _flag_U
-    and set pathvar fish_user_paths
-    and set opt "-Up"
 
   for file in $files
     # omit directories
@@ -44,7 +40,7 @@ function path-helper -d "Generate PATH configuration commands"
     # omit empty lines and comment lines
     eval cat $file | egrep -v '^\s*(#|$)' | while read -l line
       set --path splited_line $line
-      for path in $splited_line
+      for path in $splited_line[-1..1]
         set expanded_path (eval echo $path)
         if test -d $expanded_path
           set cmd "set $opt $pathvar $expanded_path;"
