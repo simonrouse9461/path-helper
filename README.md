@@ -20,7 +20,11 @@ $ omf install path-helper
 ## Usage
 
 ```fish
-$ path-helper
+$ path-add
+$ path-bind
+$ path-unbind
+$ path-load
+$ path-unload
 ```
 
 
