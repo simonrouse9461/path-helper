@@ -39,12 +39,12 @@ function path-load -d "Load paths from files and prepend to PATH"
       and echo (status function)": Generate $PATHvar from $file" >& 2
 
     if test $file
-      set -l pathfilevar __pathfile_(realpath $file| md5)
-      set -gxa __pathfiles $pathfilevar
-      set -gx $pathfilevar (realpath $file)
-      set pathvar {$pathfilevar}_{$PATHvar}
+      set -l filevar __path_file_(realpath $file | md5)
+      set -gxa __path_files $filevar
+      set -gx $filevar (realpath $file)
+      set pathvar {$filevar}_{$PATHvar}
     else
-      set pathvar __temp_{$PATHvar}
+      set pathvar __path_temp_{$PATHvar}
     end
 
     path-bind $PATHflag $pathvar
@@ -55,6 +55,8 @@ function path-load -d "Load paths from files and prepend to PATH"
       for path in $splited_line[-1..1]
         set expanded_path (eval echo $path)
         if test -d $expanded_path
+          set -l idx (contains --index -- $expanded_path $$pathvar)
+            and set -e {$pathvar}[$idx]
           set -gxp $pathvar $expanded_path
           set -q _flag_v
             and echo (status function)": Add $expanded_path to $PATHvar" >& 2
