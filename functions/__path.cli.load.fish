@@ -1,4 +1,4 @@
-function path-load -d "Load paths from files and prepend to PATH"
+function __path.cli.load -d "Load paths from files and prepend to PATH"
   argparse --name=(status function) -x p,m      \
     (fish_opt --short=p --long=PATH)            \
     (fish_opt --short=m --long=MANPATH)         \
@@ -44,22 +44,25 @@ function path-load -d "Load paths from files and prepend to PATH"
       set -gx $filevar (realpath $file)
       set pathvar {$filevar}_{$PATHvar}
     else
-      set pathvar __path_temp_{$PATHvar}
+      set pathvar __path_user_{$PATHvar}
     end
 
-    path-bind $PATHflag $pathvar
+    path bind $PATHflag $pathvar
 
     # omit empty lines and comment lines
     eval cat $file | egrep -v '^\s*(#|$)' | while read -l line
-      set --path splited_line $line
-      for path in $splited_line[-1..1]
-        set expanded_path (eval echo $path)
-        if test -d $expanded_path
-          set -l idx (contains --index -- $expanded_path $$pathvar)
+      # split line by colons
+      set --path splited $line
+      # expand tildes and wildcards
+      eval set expanded (eval echo $splited[-1..1])
+      for path in $expanded
+        # check for valid directory
+        if test -d $path
+          set -l idx (contains --index -- $path $$pathvar)
             and set -e {$pathvar}[$idx]
-          set -gxp $pathvar $expanded_path
+          set -gxp $pathvar $path
           set -q _flag_v
-            and echo (status function)": Add $expanded_path to $PATHvar" >& 2
+            and echo (status function)": Add $path to $PATHvar" >& 2
         else if not set -q _flag_s;
           set msg (set -q argv[1]; and echo "In file $file, "; or echo)
           echo (status function)": $msg$path is not a valid directory!" >& 2

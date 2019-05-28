@@ -1,4 +1,4 @@
-function path-bind -d "Automatically prepend a path variable to $PATH or $MANPATH"
+function __path.cli.bind -d "Automatically prepend a path variable to $PATH or $MANPATH"
   argparse --name=(status function) -x p,m      \
     (fish_opt --short=p --long=PATH)            \
     (fish_opt --short=m --long=MANPATH)         \
@@ -16,7 +16,7 @@ function path-bind -d "Automatically prepend a path variable to $PATH or $MANPAT
     or set PATHvar PATH
 
   eval "
-  function __reconstruct_"$PATHvar"_from_$pathvar -d \"Update \\\$$PATHvar when \\\$$pathvar changes\" --on-variable $pathvar
+  function __path_reconstruct_"$PATHvar"_from_$pathvar -d \"Update \\\$$PATHvar when \\\$$pathvar changes\" --on-variable $pathvar
     set -l local_path \$$PATHvar
     set -l added_paths_var "$pathvar"_added_$PATHvar
 
@@ -41,5 +41,5 @@ function path-bind -d "Automatically prepend a path variable to $PATH or $MANPAT
     set -xg $PATHvar \$local_path
   end
   "
-  __reconstruct_{$PATHvar}_from_{$pathvar}
+  __path_reconstruct_{$PATHvar}_from_{$pathvar}
 end

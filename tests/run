@@ -1,14 +1,14 @@
-#!/usr/bin/env fish
+#!/usr/local/bin/fish -l
 
 set -l testdir (realpath (dirname (status filename)))
 set -l testbin (basename (status filename))
-set -l testfiles $testdir/*.test.fish
+set -l testfiles $testdir/path.test.*.fish
 
 set -l idx (contains --index -- {$testdir}/{$testbin} $testfiles)
   and set -e testfiles[$idx]
 
 for file in $testfiles
-  fish $file
+  fish -l $file 
     and set_color green
     or set_color red
   echo (basename $file)

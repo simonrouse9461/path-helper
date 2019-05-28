@@ -1,4 +1,4 @@
-function path-unbind -d "Stop prepending a path variable to $PATH or $MANPATH"  
+function __path.cli.unbind -d "Stop prepending a path variable to $PATH or $MANPATH"  
   argparse --name=(status function) -x p,m      \
     (fish_opt --short=p --long=PATH)            \
     (fish_opt --short=m --long=MANPATH)         \
@@ -23,5 +23,5 @@ function path-unbind -d "Stop prepending a path variable to $PATH or $MANPATH"
   end
   set -xg $PATHvar $local_path
   set -e $added_paths_var
-  functions -e __reconstruct_{$PATHvar}_from_{$pathvar} 
+  functions -e __path_reconstruct_{$PATHvar}_from_{$pathvar} 
 end

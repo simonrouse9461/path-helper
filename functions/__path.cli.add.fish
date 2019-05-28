@@ -1,4 +1,4 @@
-function path-add -d "Prepend paths to $PATH or $MANPATH"
+function __path.cli.add -d "Prepend paths to $PATH or $MANPATH"
   argparse --name=(status function) -x p,m      \
     (fish_opt --short=p --long=PATH)            \
     (fish_opt --short=m --long=MANPATH)         \
@@ -16,5 +16,5 @@ function path-add -d "Prepend paths to $PATH or $MANPATH"
   set -q _flag_s
     and set -a opt -s
   set --path path $argv
-  echo "$path" | path-load $opt
+  echo "$path" | path load $opt
 end

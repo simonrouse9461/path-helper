@@ -1,4 +1,4 @@
-function path-unload -d "Load paths from files and prepend to PATH"
+function __path.cli.unload -d "Load paths from files and prepend to PATH"
   argparse --name=(status function) -x p,m      \
     (fish_opt --short=p --long=PATH)            \
     (fish_opt --short=m --long=MANPATH)         \
@@ -20,7 +20,7 @@ function path-unload -d "Load paths from files and prepend to PATH"
       set file $$filevar
       if test (realpath $arg) = $file
       or test (realpath $arg) = (dirname $file)
-        path-unbind $PATHflag {$filevar}_{$PATHvar}  
+        path unbind $PATHflag {$filevar}_{$PATHvar}  
         set -e {$filevar}_{$PATHvar}
         set -e $filevar
         set -l idx (contains --index -- $filevar $__path_files)
