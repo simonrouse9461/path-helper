@@ -15,30 +15,23 @@ function __path.cli.bind -d "Automatically prepend a path variable to $PATH or $
     and set PATHvar MANPATH
     or set PATHvar PATH
 
+  set -l added_paths_var {$pathvar}_added_{$PATHvar}
+
   eval "
   function __path_reconstruct_"$PATHvar"_from_$pathvar -d \"Update \\\$$PATHvar when \\\$$pathvar changes\" --on-variable $pathvar
-    set -l local_path \$$PATHvar
-    set -l added_paths_var "$pathvar"_added_$PATHvar
-
-    for x in \$\$added_paths_var
-      set -l idx (contains --index -- \$x \$local_path)
-      and set -e local_path[\$idx]
-    end
-
-    set -g \$added_paths_var
+    set -g local_path \$$PATHvar 
+    __path.util.remove local_path \$$added_paths_var
+    set -g $added_paths_var
     if set -q $pathvar
       set --path path \$$pathvar
       for x in \$path[-1..1]
-        if set -l idx (contains --index -- \$x \$local_path)
-          set -e local_path[\$idx]
-        else
-          set -ga \$added_paths_var \$x
-        end
+        __path.util.remove local_path \$x
+          or set -ga $added_paths_var \$x
         set -p local_path \$x
       end
     end
-
     set -xg $PATHvar \$local_path
+    set -e local_path
   end
   "
   __path_reconstruct_{$PATHvar}_from_{$pathvar}

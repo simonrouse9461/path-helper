@@ -6,9 +6,7 @@
 # * $dependencies  package dependencies
 if status is-login
 
-  set -q XDG_CONFIG_HOME
-    and set config_home $XDG_CONFIG_HOME
-    or set config_home ~/.config
+  set -l config_home (__path.util.xdg)
 
   path load -p {$config_home}/env/paths {$config_home}/env/paths.d
   path load -m {$config_home}/env/manpaths {$config_home}/env/manpaths.d
