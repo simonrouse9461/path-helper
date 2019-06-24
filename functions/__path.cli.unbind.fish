@@ -15,13 +15,11 @@ function __path.cli.unbind -d "Stop prepending a path variable to $PATH or $MANP
     and set PATHvar MANPATH
     or set PATHvar PATH
 
-  set -l local_path $$PATHvar
+  set -g local_path $$PATHvar
   set -l added_paths_var {$pathvar}_added_{$PATHvar}
-  for x in $$added_paths_var
-    set -l idx (contains --index -- $x $local_path)
-    and set -e local_path[$idx]
-  end
+  __path.util.remove local_path $$added_paths_var
   set -xg $PATHvar $local_path
   set -e $added_paths_var
+  set -e local_path
   functions -e __path_reconstruct_{$PATHvar}_from_{$pathvar} 
 end
